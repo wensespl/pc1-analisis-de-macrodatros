@@ -39,18 +39,19 @@ class TMDBReducer2 extends MapReduceBase implements Reducer<Text, Text, Text, Te
         int num_records = 0;
         double max = 0;
         double popularity = 0;
+        int N = 0;
         while (values.hasNext()) { //popularity, N
             // replace type of value with the actual type of our value
             Text value = (Text) values.next();
             String[] vals = value.toString().split(",");
-            num_records = Integer.parseInt(vals[1]);
-            if (num_records > max) {
-                max = num_records;
-                popularity = Double.parseDouble(vals[0]);
+            popularity = Double.parseDouble(vals[0]);
+            if (popularity > max) {
+                max = popularity;
+                N = Integer.parseInt(vals[1]);
             }
         }
 
-        output.collect(key, new Text(String.valueOf(popularity)));
+        output.collect(key, new Text(String.valueOf(max/N)));
     }
 }
 
